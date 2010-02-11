@@ -1,0 +1,14 @@
+pijo.js is a javascript implementation of pijo, providing both client and server bindings on top of js.io
+
+Pijo is a language for declaratively defining protocols, example:
+
+protocol Echo {
+	rpc->server echo {
+		request {	
+			arg msg;
+		}
+		response {
+			arg msg;
+		}
+	}
+}
