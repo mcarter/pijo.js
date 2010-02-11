@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<script src="../jsio/jsio.js"></script>
+<script id="source" type="text/pijo">
+protocol Echo {
+    rpc->server echo {
+        request {
+            arg msg;
+        }
+        response {
+            arg msg;
+        }
+    }
+    
+    rpc echo2 {
+        request {
+            arg msg;
+        }
+        response {
+            arg msg;
+        }
+    }
+}
+
+</script>
+
+<script>
+jsio('from ..parser import parse as pijoParse');
+jsio('from ..server import *');
+jsio('import logging');
+jsio('import net');
+
+// logging.getLogger('RTJPProtocol').setLevel(0);
+
+var log = logging.getLogger('mainTest');
+var protocol = pijoParse(null, document.getElementById('source').innerHTML).protocols.Echo;
+var client = new PijoConn(protocol, buildRequestInterface(protocol), {
+	echo2: function(args) {
+		log.log(args.msg);
+	}
+});
+
+client.connectionMade = function() {
+	client.remote.echo({msg:'hello'}).setCallback(function(args) {
+		client.remote.echo2(args).setCallback(function(args) {
+			log.log(args);
+		});
+	});
+}
+
+net.connect(client, 'csp', {url: 'http://localhost:5555/'});
+</script>
+</body>
+</html>
