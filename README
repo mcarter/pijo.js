@@ -2,6 +2,7 @@ pijo.js is a javascript implementation of pijo, providing both client and server
 
 Pijo is a language for declaratively defining protocols, example:
 
+# A uni-directional echo protocol
 protocol Echo {
 	rpc->server echo {
 		request {	
