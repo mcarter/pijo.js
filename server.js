@@ -78,6 +78,7 @@ exports.PijoConn = Class(RTJPProtocol, function(supr) {
 	}
 	
 	this.frameReceived = function(id, name, args) {
+		logger.info('in frameReceived', id, name, args);
 		switch (name) {
 			case 'REQUEST':
 				try {
@@ -123,8 +124,10 @@ exports.PijoConn = Class(RTJPProtocol, function(supr) {
 		if (req.timeout) { $clearTimeout(req.timeout); }
 		
 		if (!response.isSuccess) {
+			logger.info('doing errback');
 			req.later.errback(response.result);
 		} else {
+			logger.info('doing callback');
 			req.later.callback(response.result);
 		}
 	}

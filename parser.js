@@ -1,19 +1,18 @@
 jsio('import logging');
 jsio('from net.later import Later');
 
-
 var TYPES = ['arg', 'string', 'date', 'int', 'decimal', 'struct'];
 
 var logger = logging.getLogger("pijo.parser");
 //logger.setLevel(0);
 
-var posix = null;
+var fs = null;
 var readSource = function(filename) {
 	if (!posix) {
-		posix = jsio.__env.require('posix');
+		fs = jsio.__env.require('fs');
 	}
-	logger.info('reading', filename);
-	return posix.cat(filename).wait()
+	logger.debug('reading', filename);
+	return fs.cat(filename).wait()
 }
 
 exports.parse = function(filename, src) {
@@ -71,7 +70,7 @@ var Parser = Class(function(supr) {
 	}
 	this._shift = function() {
 		var token = this._tokens.shift();
-		logger.info('shifted', token);
+		logger.debug('shifted', token);
 		while (token == '\n') {
 			logger.debug('LINE', this._line);
 			this._line++;
